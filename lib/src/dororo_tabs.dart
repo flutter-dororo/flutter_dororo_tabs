@@ -5,6 +5,7 @@
 // from Material/TabBar, this package only use Cupertino
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_dororo_tabs/src/dororo_tab_theme/dororo_tab_bar_theme.dart';
 
 // init tabHeight
 const double _KTabHeight = 46.0;
@@ -135,6 +136,7 @@ class _DororoTabStyle extends AnimatedWidget {
   Widget build(BuildContext context) {
 
     final CupertinoThemeData themeData = CupertinoTheme.of(context);
+    final DororoTabBarTheme dororoTabBarTheme = DororoTabBarTheme.of(context);
     return null;
   }
 }
