@@ -4,13 +4,13 @@
 
 // from Material/TabBar, this package only use Cupertino
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_dororo_tabs/src/dororo_tab_theme/dororo_tab_bar_theme.dart';
 
 // init tabHeight
 const double _KTabHeight = 46.0;
 const double _kTextAndIconTabHeight = 72.0;
-
 
 /// Defines how the bounds of the selected tab indicator are computed.
 ///
@@ -33,17 +33,14 @@ enum DororoTabBarIndicatorSize {
   label,
 }
 
-
 // 生成DororoTab
 class DororoTab extends StatelessWidget {
-
   const DororoTab({
     Key key,
     this.text,
     this.icon,
     this.child,
-  })
-      : assert(text != null || child != null || icon != null),
+  })  : assert(text != null || child != null || icon != null),
         assert(!(text != null && null != child)),
         super(key: key);
 
@@ -55,7 +52,12 @@ class DororoTab extends StatelessWidget {
 
   // 构建字体
   Widget _buildLabelText() {
-    return child ?? Text(text, softWrap: false, overflow: TextOverflow.fade,);
+    return child ??
+        Text(
+          text,
+          softWrap: false,
+          overflow: TextOverflow.fade,
+        );
   }
 
   @override
@@ -100,17 +102,15 @@ class DororoTab extends StatelessWidget {
     );
   }
 
-
   ///
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(StringProperty('text', text, defaultValue: null));
-    properties.add(
-        DiagnosticsProperty<Widget>('icon', icon, defaultValue: null));
+    properties
+        .add(DiagnosticsProperty<Widget>('icon', icon, defaultValue: null));
   }
 }
-
 
 //
 class _DororoTabStyle extends AnimatedWidget {
@@ -134,13 +134,29 @@ class _DororoTabStyle extends AnimatedWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final CupertinoThemeData themeData = CupertinoTheme.of(context);
+    final ThemeData themeData = Theme.of(context);
     final DororoTabBarTheme dororoTabBarTheme = DororoTabBarTheme.of(context);
+    final Animation<double> animation = listenable;
+
+    final TextStyle defaultStyle = (labelStyle ??
+            dororoTabBarTheme.labelStyle ??
+            themeData.primaryTextTheme.body2)
+        .copyWith(inherit: true);
+
+    final TextStyle defaultUnselectedStyle = (unselectedLabelStyle ??
+        dororoTabBarTheme.unselectedLabelStyle ??
+        labelStyle ??
+        themeData.primaryTextTheme.body2);
+
+    final TextStyle textStyle = selected
+        ? TextStyle.lerp(defaultStyle, defaultUnselectedStyle, animation.value)
+        : TextStyle.lerp(defaultUnselectedStyle, defaultStyle, animation.value);
+
+    final Color selectedColor = labelColor ?? dororoTabBarTheme.labelColor ?? themeData.primaryTextTheme.body2.color;
+
     return null;
   }
 }
-
 
 class DororoTabBar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -161,5 +177,3 @@ class _DororoTabBarState extends State<DororoTabBar> {
     );
   }
 }
-
-
